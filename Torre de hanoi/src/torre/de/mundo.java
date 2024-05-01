@@ -1,6 +1,6 @@
 
 package torre.de;
-
+import torre.de.ResoluciónAutomatica;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -46,8 +46,10 @@ public class mundo extends JPanel implements ActionListener, MouseListener{
     boolean seleccionado;
     Anillos aroMover;
     private Image imagenFondo;
+    private int arosSeleccionados;
 
     public mundo() throws IOException {
+        hanoi = new TorresDeHanoi();
         
         ImageIcon fondos = new ImageIcon(getClass().getResource("/fondo.jpg"));
         imagenFondo = fondos.getImage();
@@ -185,14 +187,30 @@ public class mundo extends JPanel implements ActionListener, MouseListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == resolver2) {
-            int movimientos = hanoi.getContador();
-            ResoluciónAutomatica resolucionAutomatica = new ResoluciónAutomatica(hanoi, this, 1000);    // Retardo de 1000 milisegundos (1 segundo)
-            resolucionAutomatica.iniciarResolucion();
-        }
+    if (e.getSource() == resolver2) {
+        try {
+            // Obtener el número de aros seleccionado por el usuario
+            int n = (int) numeroAros.getSelectedItem();
+            // Crear una instancia de ResoluciónAutomatica con el número de aros
+            ResoluciónAutomatica resoluciónAutomatica = new ResoluciónAutomatica(n);
+            // Obtener los movimientos óptimos calculados por la computadora
+            List<String> movimientos = resoluciónAutomatica.getMovimientos();
+            System.out.println("Movimientos obtenidos:");
+            for (String movimiento : movimientos) {
+                System.out.println(movimiento);
+            }   
+            // Crear un objeto AnimadorDeMovimientos y ejecutar los movimientos visualmente
+            AnimadorDeMovimientos animador = new AnimadorDeMovimientos(torre1, torre2, torre3, movimientos);
+            animador.start();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }   
+    }
+
         if (e.getSource() == iniciar) {
             try {
                 numeroDePasos = 0;
+                arosSeleccionados = (int) numeroAros.getSelectedItem();
                 int n = (int) numeroAros.getSelectedItem();
                 arosJuego=n;
                 hanoi.setContador(0);
@@ -237,8 +255,6 @@ public class mundo extends JPanel implements ActionListener, MouseListener{
             }
         }
     }
-    
-    
 
     @Override
     public void mouseClicked(MouseEvent e) {

@@ -24,3 +24,4 @@ public class Anillos extends JPanel {
         this.setBackground(colorAnillo);
     }
 }
+    
