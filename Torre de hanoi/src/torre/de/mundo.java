@@ -22,6 +22,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.border.LineBorder;
 
 public class mundo extends JPanel implements ActionListener, MouseListener{
     JLabel fondo;
@@ -35,6 +36,7 @@ public class mundo extends JPanel implements ActionListener, MouseListener{
     Torre torre3;
     JButton iniciar;
     JComboBox numeroAros;
+    private JButton Reinicio;
     JLabel pasosEchos;
     JLabel labelPasos;
     JLabel numeroDeAros;
@@ -47,6 +49,7 @@ public class mundo extends JPanel implements ActionListener, MouseListener{
     Anillos aroMover;
     private Image imagenFondo;
     private int arosSeleccionados;
+    private AnimadorDeMovimientos animador;
 
     public mundo() throws IOException {
         hanoi = new TorresDeHanoi();
@@ -69,7 +72,7 @@ public class mundo extends JPanel implements ActionListener, MouseListener{
         labelPasos.setBounds(250, 330, 180, 10);
         this.add(labelPasos);
 
-        pasosEchos = new JLabel("Tu numero de movimientos: ");
+        pasosEchos = new JLabel("Tu numero de movimientos: " + 0);
         pasosEchos.setBounds(250, 350, 180, 10);
         this.add(pasosEchos);
 
@@ -107,17 +110,21 @@ public class mundo extends JPanel implements ActionListener, MouseListener{
 
         resolver = new JButton("Solucion");
         resolver.setBounds(500, 340, 90, 30);
+        resolver.setBorder(new LineBorder(Color.red,4,true));
         resolver.setBackground(Color.blue);
         resolver.addActionListener(this);
         this.add(resolver);
         
         resolver2 = new JButton("Resolver Automáticamente");
         resolver2.setBounds(450, 380, 200, 30);
+        resolver2.setBorder(new LineBorder(Color.red,4,true));
         resolver2.setBackground(Color.blue);
         resolver2.addActionListener(this);
         this.add(resolver2);
 
         iniciar = new JButton("Iniciar");
+        iniciar.setBorder(new LineBorder(Color.green,3,true));
+        iniciar.setBackground(Color.YELLOW);
         iniciar.setBounds(289, 400, 90, 30);
         iniciar.addActionListener(this);
         this.add(iniciar);
@@ -129,6 +136,15 @@ public class mundo extends JPanel implements ActionListener, MouseListener{
         }
         numeroAros.setBounds(80, 340, 90, 30);
         this.add(numeroAros);
+        
+        Reinicio = new JButton("Reiniciar");
+        Reinicio.setBorder(new LineBorder(Color.red,4,true));
+        Reinicio.setBackground(Color.blue);
+        Reinicio.setBounds(80, 400, 90, 30);
+        Reinicio.addActionListener(this);
+        this.add(Reinicio);
+        
+        
     }
     
     protected void paintComponent(Graphics g) {
@@ -187,6 +203,35 @@ public class mundo extends JPanel implements ActionListener, MouseListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == Reinicio) {
+            // Reiniciar variables
+            numeroDePasos = 0;
+            arosSeleccionados = 0;
+            arosJuego = 0;
+            hanoi.setContador(0);
+            aroMover = null;
+            seleccionado = false;
+
+            // Remover todos los anillos de las torres
+            torre1.removeAll();
+            torre2.removeAll();
+            torre3.removeAll();
+
+            // Actualizar la interfaz
+            torre1.updateUI();
+            torre2.updateUI();
+            torre3.updateUI();
+
+            // Reiniciar la etiqueta de pasos
+            pasosEchos.setText("Tu numero de movimientos: 0");
+
+            // Reiniciar la etiqueta de pasos mínimos
+            labelPasos.setText("Minimo de Movimientos: " + hanoi.getContador());
+
+            // Agregar los anillos nuevamente a la torre 1
+            agregarAros((int) numeroAros.getSelectedItem());
+        }
+        
     if (e.getSource() == resolver2) {
         try {
             // Obtener el número de aros seleccionado por el usuario
@@ -232,7 +277,7 @@ public class mundo extends JPanel implements ActionListener, MouseListener{
                 torre3.updateUI();
 
                 hanoi.setContador(0);
-                pasosEchos.setText("Tu numero de movimientos: ");
+                pasosEchos.setText("Tu numero de movimientos: " + 0);
                 agregarAros(n);
 
             } catch (IOException ex) {
@@ -298,6 +343,8 @@ public class mundo extends JPanel implements ActionListener, MouseListener{
                     torre1.add(aroMover);
                     torre1.updateUI();
                     numeroDePasos++;
+                    
+                    pasosEchos.setText("Tu numero de movimientos: " + numeroDePasos);
                     aroMover = null;
                     seleccionado = false;
 
