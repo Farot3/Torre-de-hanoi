@@ -10,7 +10,7 @@ public class AnimadorDeMovimientos extends Thread {
     private Torre torreDestino;
     private List<String> movimientos;
     private int anillosOrigen;
-    private int pasos;
+    public int pasos;
 
     public AnimadorDeMovimientos(Torre torreOrigen, Torre torreAuxiliar, Torre torreDestino, List<String> movimientos) {
         this.torreOrigen = torreOrigen;
@@ -46,16 +46,16 @@ public class AnimadorDeMovimientos extends Thread {
             moverAnilloVisualmente(origen, destino);
             pausar(1000); // Pausa de 1 segundo entre movimientos
         }
-        
+        JOptionPane.showMessageDialog(null, "Minimo de pasos:" + pasos );
         if (torreOrigen.getComponentCount() == 0) {
-            JOptionPane.showMessageDialog(null, "Juego terminado!");
+            JOptionPane.showMessageDialog(null, "¡Juego terminado!");
         }
     }
 
     private void moverAnilloVisualmente(int origen, int destino) {
         pasos++;
         System.out.println("Movimiento: " + origen + " -> " + destino);
-        JOptionPane.showMessageDialog(null, "Paso:" + pasos );
+        //JOptionPane.showMessageDialog(null, "Paso:" + pasos );
 
         // Obtener las torres de origen y destino
         Torre torreOrigen = obtenerTorre(origen);
@@ -105,7 +105,7 @@ public class AnimadorDeMovimientos extends Thread {
     private void reorganizarTorre(Torre torre) {
         for (int i = 0; i < torre.getComponentCount(); i++) {
             Anillos anillo = (Anillos) torre.getComponent(i);
-            int x = 80;
+            int x = 70;
             int y = 250 - (20 * i);
             anillo.setBounds(x, y, anillo.getWidth(), anillo.getHeight());
         }
@@ -113,7 +113,7 @@ public class AnimadorDeMovimientos extends Thread {
 
     private void pausar(long milisegundos) {
         try {
-            Thread.sleep(milisegundos);
+            Thread.sleep(10);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -121,7 +121,7 @@ public class AnimadorDeMovimientos extends Thread {
 
     private void esperar(int milisegundos) {
         try {
-            Thread.sleep(milisegundos);
+            Thread.sleep(8);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

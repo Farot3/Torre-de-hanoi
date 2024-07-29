@@ -4,6 +4,7 @@ package torre.de;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 public class hanoi extends javax.swing.JFrame {
     
@@ -78,6 +79,7 @@ mundo mundo;
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new hanoi().setVisible(true);
+                JOptionPane.showMessageDialog(null, "Bienvenido al juego Torre de Hanoi");
             }
         });
     }
